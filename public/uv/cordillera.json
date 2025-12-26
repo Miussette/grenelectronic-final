@@ -1,0 +1,42 @@
+{
+  "fuente": "Dirección Meteorológica de Chile",
+  "ubicacion": "Cordillera Región Metropolitana",
+  "fecha_observacion": "09-10-2025",
+  "indice_observado": {
+    "hora": "13:20",
+    "valor": 11,
+    "riesgo": "Extremo"
+  },
+  "indice_pronosticado": {
+    "fecha": "10-10-2025",
+    "rango_indice": "8-10",
+    "riesgo": "Muy alto"
+  },
+  "grafico_ultimos_10_dias": [
+    { "fecha": "30-sep", "indice_uv": 10 },
+    { "fecha": "01-oct", "indice_uv": 9 },
+    { "fecha": "02-oct", "indice_uv": 8 },
+    { "fecha": "03-oct", "indice_uv": 6 },
+    { "fecha": "04-oct", "indice_uv": 5 },
+    { "fecha": "05-oct", "indice_uv": 3 },
+    { "fecha": "06-oct", "indice_uv": 2 },
+    { "fecha": "07-oct", "indice_uv": 9 },
+    { "fecha": "08-oct", "indice_uv": 10 },
+    { "fecha": "09-oct", "indice_uv": 11 }
+  ],
+  "niveles_uv": {
+    "bajo": "1-2",
+    "moderado": "3-5",
+    "alto": "6-7",
+    "muy_alto": "8-10",
+    "extremo": "11+"
+  },
+  "recomendaciones": [
+    "El sol es extremo, evita salir entre las 11 AM y 4 PM.",
+    "Si debes estar afuera, búscate sombra siempre que puedas.",
+    "Usa protector solar FPS 50+, resistente al agua y de amplio espectro.",
+    "Viste ropa con protección UV, un sombrero de ala ancha y gafas UV.",
+    "Mantente súper hidratado, el calor puede jugarte en contra."
+  ],
+  "fuente_url": "https://www.meteochile.gob.cl"
+}

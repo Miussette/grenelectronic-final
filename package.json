@@ -1,0 +1,45 @@
+{
+  "name": "grenelectronic",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build --turbopack",
+    "start": "next start",
+    "lint": "eslint",
+    "import:electronica": "tsx scripts/import-woocommerce-electronica.ts data/wc.csv",
+    "update:prices": "tsx scripts/update-prices-from-csv.ts",
+    "export:woocommerce": "tsx scripts/export-from-woocommerce.ts"
+  },
+  "dependencies": {
+    "@woocommerce/woocommerce-rest-api": "^1.0.1",
+    "clsx": "^2.1.1",
+    "cookie": "^1.0.2",
+    "cross-fetch": "^4.1.0",
+    "jspdf": "^3.0.3",
+    "lucide-react": "^0.544.0",
+    "next": "15.5.3",
+    "qs": "^6.14.0",
+    "react": "19.1.0",
+    "react-dom": "19.1.0"
+  },
+  "devDependencies": {
+    "@eslint/eslintrc": "^3",
+    "@tailwindcss/postcss": "^4.1.13",
+    "@types/cookie": "^0.6.0",
+    "@types/node": "^20.19.22",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.21",
+    "csv-parse": "^6.1.0",
+    "dotenv": "^17.2.2",
+    "eslint": "^9",
+    "eslint-config-next": "15.5.3",
+    "eslint-import-resolver-typescript": "^4.4.4",
+    "eslint-plugin-import": "^2.32.0",
+    "postcss": "^8.5.6",
+    "tailwindcss": "3.4",
+    "tsx": "^4.20.5",
+    "typescript": "^5"
+  }
+}

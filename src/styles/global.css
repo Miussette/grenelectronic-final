@@ -1,0 +1,15 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body { @apply bg-dark text-white antialiased; }
+.h1-hero { @apply text-4xl md:text-6xl font-extrabold leading-tight; }
+.sub-hero { @apply text-base md:text-lg text-white/80 max-w-2xl; }
+.btn { @apply inline-flex items-center gap-2 px-5 py-3 rounded-2xl font-semibold; }
+.btn-primary { @apply btn bg-primary text-black hover:brightness-110 transition; }
+.btn-ghost { @apply btn bg-white/10 backdrop-blur hover:bg-white/20; }
+.section { @apply py-16 md:py-24; }
+.section-title { @apply text-3xl md:text-4xl font-extrabold mb-8; }
+.card { @apply bg-white/5 rounded-2xl p-6 border border-white/10; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }

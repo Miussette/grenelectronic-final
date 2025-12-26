@@ -1,0 +1,133 @@
+{
+  "lastUpdate": "2025-11-19T10:00:00Z",
+  "regions": [
+    {
+      "id": "arica",
+      "name": "Arica y Parinacota",
+      "uvIndex": 11,
+      "level": "Extremo",
+      "color": "#9333EA",
+      "recommendation": "Evitar exposición al sol. Usar protección máxima."
+    },
+    {
+      "id": "tarapaca",
+      "name": "Tarapacá",
+      "uvIndex": 10,
+      "level": "Muy Alto",
+      "color": "#DC2626",
+      "recommendation": "Reducir exposición al sol. Usar protección alta."
+    },
+    {
+      "id": "antofagasta",
+      "name": "Antofagasta",
+      "uvIndex": 10,
+      "level": "Muy Alto",
+      "color": "#DC2626",
+      "recommendation": "Reducir exposición al sol. Usar protección alta."
+    },
+    {
+      "id": "atacama",
+      "name": "Atacama",
+      "uvIndex": 9,
+      "level": "Muy Alto",
+      "color": "#DC2626",
+      "recommendation": "Reducir exposición al sol. Usar protección alta."
+    },
+    {
+      "id": "coquimbo",
+      "name": "Coquimbo",
+      "uvIndex": 8,
+      "level": "Alto",
+      "color": "#EA580C",
+      "recommendation": "Usar protección solar. Evitar exposición prolongada."
+    },
+    {
+      "id": "valparaiso",
+      "name": "Valparaíso",
+      "uvIndex": 7,
+      "level": "Alto",
+      "color": "#EA580C",
+      "recommendation": "Usar protección solar. Evitar exposición prolongada."
+    },
+    {
+      "id": "metropolitana",
+      "name": "Metropolitana",
+      "uvIndex": 7,
+      "level": "Alto",
+      "color": "#EA580C",
+      "recommendation": "Usar protección solar. Evitar exposición prolongada."
+    },
+    {
+      "id": "ohiggins",
+      "name": "O'Higgins",
+      "uvIndex": 6,
+      "level": "Alto",
+      "color": "#EA580C",
+      "recommendation": "Usar protección solar. Evitar exposición prolongada."
+    },
+    {
+      "id": "maule",
+      "name": "Maule",
+      "uvIndex": 6,
+      "level": "Alto",
+      "color": "#EA580C",
+      "recommendation": "Usar protección solar. Evitar exposición prolongada."
+    },
+    {
+      "id": "nuble",
+      "name": "Ñuble",
+      "uvIndex": 5,
+      "level": "Moderado",
+      "color": "#F59E0B",
+      "recommendation": "Usar protección solar en horas peak."
+    },
+    {
+      "id": "biobio",
+      "name": "Biobío",
+      "uvIndex": 5,
+      "level": "Moderado",
+      "color": "#F59E0B",
+      "recommendation": "Usar protección solar en horas peak."
+    },
+    {
+      "id": "araucania",
+      "name": "La Araucanía",
+      "uvIndex": 4,
+      "level": "Moderado",
+      "color": "#F59E0B",
+      "recommendation": "Usar protección solar en horas peak."
+    },
+    {
+      "id": "rios",
+      "name": "Los Ríos",
+      "uvIndex": 4,
+      "level": "Moderado",
+      "color": "#F59E0B",
+      "recommendation": "Usar protección solar en horas peak."
+    },
+    {
+      "id": "lagos",
+      "name": "Los Lagos",
+      "uvIndex": 3,
+      "level": "Moderado",
+      "color": "#F59E0B",
+      "recommendation": "Usar protección solar en horas peak."
+    },
+    {
+      "id": "aysen",
+      "name": "Aysén",
+      "uvIndex": 3,
+      "level": "Moderado",
+      "color": "#F59E0B",
+      "recommendation": "Usar protección solar en horas peak."
+    },
+    {
+      "id": "magallanes",
+      "name": "Magallanes",
+      "uvIndex": 2,
+      "level": "Bajo",
+      "color": "#10B981",
+      "recommendation": "Protección mínima requerida."
+    }
+  ]
+}
