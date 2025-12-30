@@ -9,6 +9,7 @@ import {
   Menu,
   ShoppingCart,
   Instagram,
+  LogIn,
   // Linkedin, Youtube
 } from "lucide-react";
 import { useCart } from "@/context/CartContext"; // 👈 usar contexto
@@ -76,6 +77,14 @@ export default function Navbar() {
 
         {/* DERECHA (desktop) */}
         <div className="hidden md:flex items-center gap-3">
+          {/* Ingresar */}
+          <Link
+            href="/admin/login"
+            aria-label="Ingresar"
+            className="p-2 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition"
+          >
+            <LogIn size={18} aria-hidden />
+          </Link>
           {/* En corporativo: mostrar CTA "Ir a Tienda" */}
           {!isStore && SHOW_SHOP_CTA && (
             <Link
@@ -101,6 +110,7 @@ export default function Navbar() {
               <Icon size={18} aria-hidden />
             </a>
           ))}
+
 
           {/* SOLO EN TIENDA: Carrito */}
           {isStore && (
