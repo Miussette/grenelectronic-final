@@ -13,6 +13,15 @@ Optional
 
 - `NEXT_PUBLIC_USE_MOCK_WP` / `BUILD_USE_MOCK_WP` — set to `1` to use the local mock endpoint `/api/_mock/wp` during build if the real WP is unreachable.
 
+Cotizaciones fallback (production)
+
+When running on serverless platforms (Vercel, etc.) the filesystem is read-only and the app cannot persist cotizaciones to `data/cotizaciones.json`. The app will try to write locally first; if that fails you can configure an SMTP fallback to email new cotizaciones to an administrator.
+
+- `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS` — SMTP credentials
+- `ADMIN_EMAIL` — destination for cotizaciones emails
+
+If SMTP isn't configured and the server can't write to disk, submissions will fail with an internal error. For production it's recommended to either provide SMTP settings or replace the file persistence with a DB or an external API.
+
 Local (Windows PowerShell)
 
 Copy `.env.example` to `.env.local` and edit values, then run:
