@@ -3,13 +3,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { useRouter } from "next/router";
 import {
   Menu,
   ShoppingCart,
   Instagram,
   LogIn,
+  User,
+  LogOut,
   // Linkedin, Youtube
 } from "lucide-react";
 import { useCart } from "@/context/CartContext"; // 👈 usar contexto
@@ -37,6 +39,66 @@ function normalizeHref(href: string) {
   return href.startsWith("#")
     ? ({ pathname: HOME_BASE, hash: href.slice(1) } as const)
     : href;
+}
+
+function AdminStatus({ mobile, onAction }: { mobile?: boolean; onAction?: () => void }) {
+  const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    fetch("/api/admin/me")
+      .then((r) => r.json())
+      .then((j) => {
+        if (!mounted) return;
+        setIsAdmin(!!j?.ok);
+      })
+      .catch(() => { if (mounted) setIsAdmin(false); });
+    return () => { mounted = false; };
+  }, []);
+
+  if (isAdmin === null) {
+    return (
+      <div className="p-2 rounded-lg text-white/60">...</div>
+    );
+  }
+
+  if (isAdmin) {
+    return (
+      <div className="flex items-center gap-2">
+        <Link
+          href="/admin"
+          className="p-2 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition flex items-center"
+          onClick={onAction}
+        >
+          <User size={18} aria-hidden />
+        </Link>
+        <button
+          className="p-2 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition"
+          onClick={async () => {
+            try {
+              await fetch("/api/admin/logout");
+            } catch {}
+            setIsAdmin(false);
+            if (onAction) onAction(); else location.reload();
+          }}
+          title="Cerrar sesión"
+        >
+          <LogOut size={18} aria-hidden />
+        </button>
+      </div>
+    );
+  }
+
+  return (
+    <Link
+      href="/admin/login"
+      aria-label="Ingresar"
+      className="p-2 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition"
+      onClick={onAction}
+    >
+      <LogIn size={18} aria-hidden />
+    </Link>
+  );
 }
 
 export default function Navbar() {
@@ -77,14 +139,8 @@ export default function Navbar() {
 
         {/* DERECHA (desktop) */}
         <div className="hidden md:flex items-center gap-3">
-          {/* Ingresar */}
-          <Link
-            href="/admin/login"
-            aria-label="Ingresar"
-            className="p-2 rounded-lg hover:bg-white/10 text-white/80 hover:text-white transition"
-          >
-            <LogIn size={18} aria-hidden />
-          </Link>
+          {/* Perfil / Ingresar */}
+          <AdminStatus />
           {/* En corporativo: mostrar CTA "Ir a Tienda" */}
           {!isStore && SHOW_SHOP_CTA && (
             <Link
@@ -145,6 +201,11 @@ export default function Navbar() {
         <div className="md:hidden border-t border-white/10">
           <div className="container mx-auto py-2 flex flex-col gap-2">
             {NAV.map((i) => renderNavItem(i, () => setOpen(false)))}
+
+            {/* Perfil / Ingresar (mobile) */}
+            <div className="py-2">
+              <AdminStatus mobile onAction={() => setOpen(false)} />
+            </div>
 
             <div className="flex items-center gap-3 py-2">
               {/* En corporativo: CTA a Tienda */}

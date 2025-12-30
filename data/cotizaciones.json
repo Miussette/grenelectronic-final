@@ -1,1 +1,23 @@
-[]
+[
+  {
+    "id": 1767106645954,
+    "createdAt": "2025-12-30T14:57:25.954Z",
+    "nombre": "Carola Sofia Carrasco Garrido ",
+    "email": "miussette.alfaro@gmail.com",
+    "telefono": "+56943523826",
+    "empresa": "18065103-9",
+    "rut": "1806599965",
+    "direccion": "Gabriel González videla 2418, Maipú",
+    "mensaje": "sdaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "lineItems": [
+      {
+        "id": "p-1767109068443",
+        "name": "ZAPATILLA ALARGADOR 6 POSICIONES",
+        "price": 1500,
+        "qty": 1,
+        "sourceId": 1147
+      }
+    ],
+    "updatedAt": "2025-12-30T15:38:14.599Z"
+  }
+]
