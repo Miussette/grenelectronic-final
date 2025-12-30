@@ -147,6 +147,8 @@ export default function CheckoutPage() {
                       required
                       value={form.nombre}
                       onChange={(e) => setForm({ ...form, nombre: e.target.value })}
+                      aria-label="Nombre"
+                      placeholder="Nombre"
                       className="w-full rounded-xl border border-gray-300 bg-white text-black px-4 py-3 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 outline-none"
                     />
                   </div>
@@ -160,6 +162,8 @@ export default function CheckoutPage() {
                       required
                       value={form.apellido}
                       onChange={(e) => setForm({ ...form, apellido: e.target.value })}
+                      aria-label="Apellido"
+                      placeholder="Apellido"
                       className="w-full rounded-xl border border-gray-300 bg-white text-black px-4 py-3 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 outline-none"
                     />
                   </div>
@@ -173,6 +177,8 @@ export default function CheckoutPage() {
                       required
                       value={form.email}
                       onChange={(e) => setForm({ ...form, email: e.target.value })}
+                      aria-label="Email"
+                      placeholder="email@ejemplo.com"
                       className="w-full rounded-xl border border-gray-300 bg-white text-black px-4 py-3 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 outline-none"
                     />
                   </div>
@@ -186,6 +192,8 @@ export default function CheckoutPage() {
                       required
                       value={form.telefono}
                       onChange={(e) => setForm({ ...form, telefono: e.target.value })}
+                      aria-label="Teléfono"
+                      placeholder="+569..."
                       className="w-full rounded-xl border border-gray-300 bg-white text-black px-4 py-3 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 outline-none"
                     />
                   </div>
@@ -199,6 +207,7 @@ export default function CheckoutPage() {
                       required
                       value={form.rut}
                       onChange={(e) => setForm({ ...form, rut: e.target.value })}
+                      aria-label="RUT"
                       className="w-full rounded-xl border border-gray-300 bg-white text-black px-4 py-3 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 outline-none"
                       placeholder="12.345.678-9"
                     />
@@ -213,6 +222,8 @@ export default function CheckoutPage() {
                       required
                       value={form.direccion}
                       onChange={(e) => setForm({ ...form, direccion: e.target.value })}
+                      aria-label="Dirección"
+                      placeholder="Dirección"
                       className="w-full rounded-xl border border-gray-300 bg-white text-black px-4 py-3 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 outline-none"
                     />
                   </div>
@@ -226,6 +237,8 @@ export default function CheckoutPage() {
                       required
                       value={form.ciudad}
                       onChange={(e) => setForm({ ...form, ciudad: e.target.value })}
+                      aria-label="Ciudad"
+                      placeholder="Ciudad"
                       className="w-full rounded-xl border border-gray-300 bg-white text-black px-4 py-3 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 outline-none"
                     />
                   </div>
@@ -239,6 +252,8 @@ export default function CheckoutPage() {
                       required
                       value={form.region}
                       onChange={(e) => setForm({ ...form, region: e.target.value })}
+                      aria-label="Región"
+                      placeholder="Región"
                       className="w-full rounded-xl border border-gray-300 bg-white text-black px-4 py-3 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 outline-none"
                     />
                   </div>
@@ -251,6 +266,8 @@ export default function CheckoutPage() {
                       type="text"
                       value={form.codigoPostal}
                       onChange={(e) => setForm({ ...form, codigoPostal: e.target.value })}
+                      aria-label="Código Postal"
+                      placeholder="Código Postal"
                       className="w-full rounded-xl border border-gray-300 bg-white text-black px-4 py-3 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 outline-none"
                     />
                   </div>
@@ -265,6 +282,7 @@ export default function CheckoutPage() {
                       onChange={(e) => setForm({ ...form, notas: e.target.value })}
                       className="w-full rounded-xl border border-gray-300 bg-white text-black px-4 py-3 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/40 outline-none resize-none"
                       placeholder="Notas sobre tu pedido, ej. instrucciones de entrega"
+                      aria-label="Notas del pedido"
                     />
                   </div>
                 </div>

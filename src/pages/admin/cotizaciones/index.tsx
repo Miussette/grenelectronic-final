@@ -7,10 +7,9 @@ type Quote = Record<string, any> & { id: number; createdAt?: string };
 
 function toCsv(rows: Record<string, any>[]) {
   if (!rows || rows.length === 0) return "";
-  const keys = Array.from(rows.reduce((s, r) => {
-    Object.keys(r).forEach(k => s.add(k));
-    return s;
-  }, new Set<string>()));
+  const keySet = new Set<string>();
+  rows.forEach(r => { Object.keys(r).forEach(k => keySet.add(k)); });
+  const keys = Array.from(keySet);
 
   const esc = (v: any) => {
     if (v === null || v === undefined) return "";
@@ -273,10 +272,10 @@ export default function AdminQuotesPage() {
                             <div className="text-sm font-medium">{it.name}</div>
                             <div className="text-xs text-gray-500">{it.sourceId ? `ID tienda: ${it.sourceId}` : ''}</div>
                           </div>
-                          <input value={it.qty} onChange={e=>{
+                          <input aria-label={`Cantidad para ${it.name}`} value={it.qty} onChange={e=>{
                             const next = [...(form.lineItems||[])]; next[idx].qty = Number(e.target.value||1); setForm({...form, lineItems: next});
                           }} className="w-16 p-1 border rounded text-center" />
-                          <input value={String(it.price ?? '')} onChange={e=>{
+                          <input aria-label={`Precio para ${it.name}`} value={String(it.price ?? '')} onChange={e=>{
                             const next = [...(form.lineItems||[])]; next[idx].price = Number(e.target.value||0); setForm({...form, lineItems: next});
                           }} className="w-24 p-1 border rounded text-right" />
                           <button className="px-2 py-1 border rounded" onClick={()=>removeItem(idx)}>Eliminar</button>
@@ -317,7 +316,7 @@ export default function AdminQuotesPage() {
                 onChange={(e) => { setQuery(e.target.value); setPage(1); }}
                 className="p-2 border rounded w-64 bg-white text-black"
               />
-              <select value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1); }} className="p-2 border rounded">
+              <select aria-label="Tamaño de página" value={pageSize} onChange={e => { setPageSize(Number(e.target.value)); setPage(1); }} className="p-2 border rounded">
                 <option value={10}>10 / pág</option>
                 <option value={25}>25 / pág</option>
                 <option value={50}>50 / pág</option>
