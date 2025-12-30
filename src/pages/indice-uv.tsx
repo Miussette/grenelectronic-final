@@ -2,6 +2,7 @@ import { GetStaticProps } from "next";
 import type { NextApiRequest, NextApiResponse } from "next";
 import Head from "next/head";
 import { useState } from "react";
+import vm from "vm";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import { Sun } from "lucide-react";
@@ -84,6 +85,15 @@ export default function IndiceUVPage({ lastUpdate, regions, weather }: Props) {
               <p className="text-sm text-white/60 mt-4">
                 Última actualización: {formatDate(lastUpdate)}
               </p>
+              <a 
+                href="https://www.meteochile.gob.cl/PortalDMC-web/index.xhtml" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 mt-4 px-4 py-2 bg-primary/20 hover:bg-primary/30 rounded-lg text-primary transition-colors"
+              >
+                <Sun className="w-4 h-4" />
+                Ver datos oficiales en Meteochile
+              </a>
             </div>
 
             {/* Buscador */}
@@ -148,7 +158,7 @@ export default function IndiceUVPage({ lastUpdate, regions, weather }: Props) {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center gap-2">
                           <img
-                            src={`https://openweathermap.org/img/wn/${region.weather.icon}@2x.png`}
+                            src={region.weather.icon}
                             alt={region.weather.description}
                             className="w-12 h-12"
                           />
@@ -207,6 +217,19 @@ export default function IndiceUVPage({ lastUpdate, regions, weather }: Props) {
                 <p className="font-semibold text-primary">
                   Protégete siempre usando protector solar, lentes de sol y ropa adecuada.
                 </p>
+                <div className="mt-4 pt-4 border-t border-white/10">
+                  <p className="text-sm text-white/60">
+                    Datos meteorológicos proporcionados por{" "}
+                    <a 
+                      href="https://www.meteochile.gob.cl/PortalDMC-web/index.xhtml"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-primary hover:underline"
+                    >
+                      Dirección Meteorológica de Chile (Meteochile)
+                    </a>
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -219,14 +242,58 @@ export default function IndiceUVPage({ lastUpdate, regions, weather }: Props) {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  const fs = await import("fs/promises");
-  const path = await import("path");
-  
   try {
-    // Cargar datos UV del JSON
-    const filePath = path.join(process.cwd(), "public", "data", "uv-index.json");
-    const fileContent = await fs.readFile(filePath, "utf-8");
-    const uvData = JSON.parse(fileContent);
+    // Intentar obtener datos UV de Meteochile API
+    let uvRegions: UVRegion[] = [];
+    let uvLastUpdate = new Date().toISOString();
+    
+    const meteochileUser = process.env.METEOCHILE_USER;
+    const meteochileToken = process.env.METEOCHILE_TOKEN;
+    
+    if (meteochileUser && meteochileToken) {
+      // Usar API de Meteochile
+      const uvUrl = `https://climatologia.meteochile.gob.cl/application/servicios/getRecienteUvb?usuario=${encodeURIComponent(meteochileUser)}&token=${encodeURIComponent(meteochileToken)}`;
+      
+      try {
+        const uvResponse = await fetch(uvUrl);
+        if (uvResponse.ok) {
+          const uvData = await uvResponse.json();
+          const stations = Array.isArray(uvData) ? uvData : uvData.datos || [];
+          
+          uvRegions = stations.map((station: { codigoNacional: string; nombreEstacion: string; uvb: number; momento: string }) => {
+            const name = station.nombreEstacion || `Estación ${station.codigoNacional}`;
+            const uvIndex = Math.round(station.uvb);
+            const { level, color, recommendation } = getUVLevel(uvIndex);
+            
+            return {
+              id: slugify(name),
+              name,
+              uvIndex,
+              level,
+              color,
+              recommendation,
+            };
+          });
+          
+          if (stations.length > 0) {
+            uvLastUpdate = stations[0].momento || new Date().toISOString();
+          }
+        }
+      } catch (uvError) {
+        console.error("Error fetching Meteochile UV data:", uvError);
+      }
+    }
+    
+    // Si no hay datos de Meteochile, usar JSON local como fallback
+    if (uvRegions.length === 0) {
+      const fs = await import("fs/promises");
+      const path = await import("path");
+      const filePath = path.join(process.cwd(), "public", "data", "uv-index.json");
+      const fileContent = await fs.readFile(filePath, "utf-8");
+      const uvData = JSON.parse(fileContent);
+      uvRegions = uvData.regions;
+      uvLastUpdate = uvData.lastUpdate;
+    }
 
     // Importar directamente el handler de la API de clima
     const weatherHandler = await import("./api/weather/chile");
@@ -251,11 +318,11 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 
     return {
       props: {
-        lastUpdate: uvData.lastUpdate,
-        regions: uvData.regions,
+        lastUpdate: uvLastUpdate,
+        regions: uvRegions,
         weather: weatherData,
       },
-      revalidate: 3600, // Revalidar cada hora
+      revalidate: 1800, // Revalidar cada 30 minutos
     };
   } catch (error) {
     console.error("Error loading data:", error);
@@ -267,6 +334,50 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
         weather: [],
       },
       revalidate: 3600,
+    };
+  }
+};
+
+// Funciones auxiliares para UV
+const slugify = (value: string) =>
+  value
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "")
+    .trim();
+
+const getUVLevel = (uvIndex: number): { level: string; color: string; recommendation: string } => {
+  if (uvIndex <= 2) {
+    return {
+      level: "Bajo",
+      color: "#10B981",
+      recommendation: "Puedes disfrutar del sol con precauciones mínimas.",
+    };
+  } else if (uvIndex <= 5) {
+    return {
+      level: "Moderado",
+      color: "#F59E0B",
+      recommendation: "Usa protector solar SPF 30+, sombrero y lentes de sol.",
+    };
+  } else if (uvIndex <= 7) {
+    return {
+      level: "Alto",
+      color: "#EA580C",
+      recommendation: "Reduce exposición entre 10:00 y 16:00. Usa protección.",
+    };
+  } else if (uvIndex <= 10) {
+    return {
+      level: "Muy Alto",
+      color: "#DC2626",
+      recommendation: "Evita el sol del mediodía. Protección obligatoria.",
+    };
+  } else {
+    return {
+      level: "Extremo",
+      color: "#9333EA",
+      recommendation: "Evita salir. Si es necesario, protección máxima.",
     };
   }
 };

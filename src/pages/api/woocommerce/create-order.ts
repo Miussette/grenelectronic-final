@@ -84,6 +84,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     const auth = Buffer.from(`${WC_KEY}:${WC_SECRET}`).toString("base64");
 
+    console.info("[api/woocommerce/create-order] creating order in WooCommerce", { itemsCount: items.length, paymentMethod, customerEmail: billing.email });
+
     const response = await fetch(`${WC_BASE}/wp-json/wc/v3/orders`, {
       method: "POST",
       headers: {
@@ -100,6 +102,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     const order = (await response.json()) as WooOrderResponse;
+    console.info("[api/woocommerce/create-order] WooCommerce order created", { id: order.id, number: order.number });
 
     // Si es Flow, generar URL de pago
     let flowUrl: string | null = null;
@@ -110,33 +113,21 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         const subtotal = items.reduce((sum, item) => sum + item.price * item.qty, 0);
         const total = Math.round(subtotal * 1.19);
 
-        console.log("Creando pago Flow:", { orderId: order.id, total, email: billing.email });
+        console.info("[api/woocommerce/create-order] creating Flow payment", { orderId: order.id, total, email: billing.email });
 
-        const appBaseUrl = process.env.APP_BASE_URL ?? "http://localhost:3000";
-
-        const flowResponse = await fetch(`${appBaseUrl}/api/payments/flow/create`, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
+        // Llamamos a Flow directamente desde el servidor (sin pasar por HTTP interno)
+        const { createFlowPayment } = await import("@/lib/flow/create");
+        try {
+          const flowResult = await createFlowPayment({
             orderId: String(order.id),
             total,
             email: billing.email,
             subject: `Orden #${order.number} - Grenelectronic`,
-          }),
-        });
-
-        const flowData: unknown = await flowResponse.json();
-
-        if (
-          flowResponse.ok &&
-          typeof flowData === "object" &&
-          flowData !== null &&
-          "paymentUrl" in flowData &&
-          typeof (flowData as { paymentUrl: unknown }).paymentUrl === "string"
-        ) {
-          flowUrl = (flowData as { paymentUrl: string }).paymentUrl;
-        } else {
-          console.error("Error en Flow:", flowData);
+          });
+          flowUrl = flowResult.paymentUrl;
+          console.info("[api/woocommerce/create-order] Flow payment created", { orderId: order.id, paymentUrl: flowUrl ? "(omitted)" : null, token: flowResult.token ? String(flowResult.token).slice(0, 6) : undefined });
+        } catch (flowErr) {
+          console.error("[api/woocommerce/create-order] Flow error", flowErr instanceof Error ? flowErr.message : flowErr);
         }
       } catch (flowError: unknown) {
         console.error("Error al crear pago Flow:", flowError);
